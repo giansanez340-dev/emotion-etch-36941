@@ -1,24 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>emotion-etch</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Etch - Text Tone & Emotion Analysis</title>
+    <meta name="description" content="Analyze the tone and emotion in your text with our advanced text analysis tool">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Emotion Etch</h1>
+            <p class="subtitle">Analyze tone and emotion in your text</p>
+        </header>
 
-    <meta property="og:title" content="emotion-etch" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+        <main class="main-content">
+            <!-- Text Input Area -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Text Analysis</h2>
+                </div>
+                <div class="card-content">
+                    <textarea 
+                        id="textInput" 
+                        placeholder="Enter or paste your text here for tone and emotion analysis..."
+                        maxlength="500"
+                    ></textarea>
+                    <p class="char-count">
+                        <span id="charCount">0</span>/500 characters
+                    </p>
+                </div>
+            </section>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+            <!-- Analysis Preview -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Analysis Preview</h2>
+                    <button id="explainBtn" class="btn-outline">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Explain
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div id="sentencePreview" class="sentence-preview">
+                        <p class="empty-state">Enter text to see analysis...</p>
+                    </div>
+                    
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-box positive"></div>
+                            <span>Positive</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-box negative"></div>
+                            <span>Negative</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-box neutral"></div>
+                            <span>Neutral</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+            <!-- Tone Analysis -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Tone Analysis</h2>
+                </div>
+                <div class="card-content">
+                    <div class="analysis-row">
+                        <span class="label">Overall Tone</span>
+                        <span id="toneBadge" class="badge">-</span>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span class="label">Confidence</span>
+                            <span id="toneConfidence" class="value">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="toneProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emotion Analysis -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Emotion Analysis</h2>
+                </div>
+                <div class="card-content">
+                    <div class="analysis-row">
+                        <span class="label">Primary Emotion</span>
+                        <span id="emotionBadge" class="badge badge-secondary">-</span>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span class="label">Confidence</span>
+                            <span id="emotionConfidence" class="value">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="emotionProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Explanation Dialog -->
+    <div id="explanationDialog" class="dialog-overlay">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h3 class="dialog-title">Analysis Explanation</h3>
+                <button id="closeDialog" class="close-btn">&times;</button>
+            </div>
+            <div class="dialog-content">
+                <p class="dialog-description">Here's why we detected this tone and emotion in your text.</p>
+                
+                <div class="explanation-section">
+                    <div class="explanation-header">
+                        <h4>Tone:</h4>
+                        <span id="dialogToneBadge" class="badge">-</span>
+                    </div>
+                    <p id="toneExplanation" class="explanation-text"></p>
+                </div>
+
+                <div class="explanation-section">
+                    <div class="explanation-header">
+                        <h4>Emotion:</h4>
+                        <span id="dialogEmotionBadge" class="badge badge-secondary">-</span>
+                    </div>
+                    <p id="emotionExplanation" class="explanation-text"></p>
+                </div>
+
+                <div class="note">
+                    <strong>Note:</strong> This analysis is based on language patterns and context. 
+                    Results may vary depending on cultural context and individual interpretation.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
